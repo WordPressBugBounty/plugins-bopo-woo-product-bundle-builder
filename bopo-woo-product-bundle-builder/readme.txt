@@ -3,9 +3,9 @@ Contributors: villatheme, mrt3vn
 Donate link: http://www.villatheme.com/donate
 Tags: woocommerce product bundle, woocommerce bundle, product bundle woocommerce, woocommerce bundle plugin, woocommerce
 Requires at least: 5.0
-Tested up to: 6.8.2
+Tested up to: 6.9
 WC requires at least: 7.0
-WC tested up to: 10.0.3
+WC tested up to: 10.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Stable tag: trunk
@@ -245,6 +245,9 @@ Bopo – Woo Product Bundle Builder (Best for WooCommerce product bundle) is bui
 4. Selected Product Bundle
 
 == Changelog ==
+/**1.2.0 - 2026.04.03 **/
+- Updated: Optimize code
+
 /**1.1.6 - 2025.07.26 **/
 – Updated: Compatible with WP 6.8.2 and WC 10.0.3
 – Updated: Update support class

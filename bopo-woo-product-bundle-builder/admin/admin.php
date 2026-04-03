@@ -3,7 +3,7 @@
 Class Name: VI_WOO_BOPO_BUNDLE_Admin
 Author: Andy Ha (support@villatheme.com)
 Author URI: http://villatheme.com
-Copyright 2015 villatheme.com. All rights reserved.
+Copyright 2022-2026 VillaTheme.com. All rights reserved.
 */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -119,13 +119,12 @@ class VI_WOO_BOPO_BUNDLE_Admin {
 
 	public function bopobb_first_bopobb_link() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
+			wp_die();
 		}
-		if ( isset( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], 'bopobb_settings_page_save' ) ) {
-			$bopo_settings['bopobb-first-product'] = 1;
-			update_option( 'woo_bopo_bundle_params', $bopo_settings );
-		}
-		die;
+		check_ajax_referer( 'bopobb_settings_page_save', 'nonce' );
+		$bopo_settings['bopobb-first-product'] = 1;
+		update_option( 'woo_bopo_bundle_params', $bopo_settings );
+		wp_die();
 	}
 
 	function bopobb_wp_get_page_url_by_template_slug( $template_slug ) {

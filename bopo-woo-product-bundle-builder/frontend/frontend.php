@@ -776,9 +776,12 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Frontend' ) ) {
 			} else {
 				return;
 			}
+			$product_bundle = wc_get_product( $p_product_id );
+			if ( ! $product_bundle || ( ! current_user_can( 'read_product', $product_bundle->get_id() ) && 'publish' !== $product_bundle->get_status() ) ) {
+				wp_die();
+			}
 			$page = isset( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
 			$per_page = intval( $this->settings->get_params('bopobb_popup_page_items') ) != 0 ? intval( $this->settings->get_params('bopobb_popup_page_items') ) : 32;
-			$product_bundle = wc_get_product( $p_product_id );
 			if ( $items = $product_bundle->get_items() ) {
 				$items_data    = $items['items'][ $item_index ];
 				$i_product_ids = $this->bopobb_search_product( 0, 1, $items_data );
@@ -910,6 +913,9 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Frontend' ) ) {
 				return;
 			}
 			$product_variable = wc_get_product( $p_product_id );
+			if ( ! $product_variable || ( ! current_user_can( 'read_product', $product_variable->get_id() ) && 'publish' !== $product_variable->get_status() ) ) {
+				wp_die();
+			}
 			if ( $product_variable->has_child() && $product_variable->is_type( 'variable' ) ) {
 
 				$product_children = $product_variable->get_children();
@@ -1068,7 +1074,7 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Frontend' ) ) {
                                     </div>
                                 </div>
 							<?php endforeach;?>
-                        </di>
+                        </div>
                     </div>
                     <?php
 				}
@@ -1078,19 +1084,17 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Frontend' ) ) {
 
 		function bopobb_product_gallery() {
 		    check_ajax_referer( 'bopo-nonce', 'nonce' );
-		    if ( isset( $_POST['item'] ) && ( $_POST['item'] !== '' ) ) {
-				$item_list = absint( $_POST['item'] );
-			} else {
-				return;
-			}
 			if ( isset( $_POST['product'] ) && ( $_POST['product'] !== '' ) ) {
 				$p_product_id = absint( $_POST['product'] );
 			} else {
-				return;
+			wp_die();
 			}
 			global $post, $product;
 			$post = get_post( $p_product_id );
 			$product = wc_get_product($p_product_id);
+            if ( ! $product || (!current_user_can( 'read_product', $product->get_id() ) && $product->get_status() !== 'publish' ) ) {
+			wp_die();
+            }
 			wc_get_template( 'single-product/product-image.php' );
 			wp_reset_postdata();
 

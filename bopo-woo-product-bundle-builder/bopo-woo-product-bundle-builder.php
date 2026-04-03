@@ -3,19 +3,19 @@
  * Plugin Name: Bopo - WooCommerce Product Bundle Builder
  * Plugin URI: https://villatheme.com/extensions/bopo-woocommerce-product-bundle-builder/
  * Description: Create irresistible bundle products for WooCommerce, offering flexible pricing and great deals for your customers
- * Version: 1.1.6
+ * Version: 1.2.0
  * Author: VillaTheme
  * Author URI: http://villatheme.com
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: woo-bopo-bundle
  * Domain Path: /languages
- * Copyright 2022-2025 VillaTheme.com. All rights reserved.
+ * Copyright 2022-2026 VillaTheme.com. All rights reserved.
  * Requires Plugins: woocommerce
  * Requires at least: 5.0
- * Tested up to: 6.8.2
+ * Tested up to: 6.9
  * WC requires at least: 7.0
- * WC tested up to: 10.0.3
+ * WC tested up to: 10.6
  * Requires PHP: 7.0
  */
 
@@ -33,7 +33,7 @@ if (is_plugin_active('bopo-woocommerce-product-bundle-builder/bopo-woocommerce-p
 	return;
 }
 if (!defined('VI_WOO_BOPO_BUNDLE_VERSION')) {
-    define('VI_WOO_BOPO_BUNDLE_VERSION', '1.1.6');
+    define('VI_WOO_BOPO_BUNDLE_VERSION', '1.2.0');
 }
 
 if (!class_exists('VI_WOO_BOPO_BUNDLE')) {

@@ -69,9 +69,9 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 
 			ob_start();
 
-			$keyword = isset( $_GET['keyword'] ) ? sanitize_text_field( $_GET['keyword'] ) : '';
+			$keyword = isset( $_GET['keyword'] ) ? sanitize_text_field( wp_unslash( $_GET['keyword'] ) ) : '';
 			if ( ! $keyword ) {
-				$keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( $_POST['keyword'] ) : '';
+				$keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( wp_unslash( $_POST['keyword'] ) ) : '';
 			}
 			if ( empty( $keyword ) ) {
 				die();
@@ -106,9 +106,9 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 
 			ob_start();
 
-			$keyword = isset( $_GET['keyword'] ) ? sanitize_text_field( $_GET['keyword'] ) : '';
+			$keyword = isset( $_GET['keyword'] ) ? sanitize_text_field( wp_unslash( $_GET['keyword'] ) ) : '';
 			if ( ! $keyword ) {
-				$keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( $_POST['keyword'] ) : '';
+				$keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( wp_unslash( $_POST['keyword'] ) ) : '';
 			}
 			if ( empty( $keyword ) ) {
 				die();
@@ -143,7 +143,7 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 
 			ob_start();
 
-			$keyword = isset( $_GET['keyword'] ) ? sanitize_text_field( $_GET['keyword'] ) : '';
+			$keyword = isset( $_GET['keyword'] ) ? sanitize_text_field( wp_unslash( $_GET['keyword'] ) ) : '';
 
 			if ( empty( $keyword ) ) {
 				die();
@@ -152,6 +152,7 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 				'post_status'    => 'publish',
 				'post_type'      => 'product',
 				'posts_per_page' => 50,
+				'no_found_rows'  => true,
 				's'              => $keyword
 
 			);
@@ -192,7 +193,7 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 
 			ob_start();
 
-			$keyword        = isset( $_GET['keyword'] ) ? sanitize_text_field( $_GET['keyword'] ) : '';
+			$keyword        = isset( $_GET['keyword'] ) ? sanitize_text_field( wp_unslash( $_GET['keyword'] ) ) : '';
 			$cat_search     = isset( $_GET['cat'] ) ? array_map('sanitize_text_field', $_GET['cat'] ) : [];
 			$ex_cat_search  = isset( $_GET['ex_cat'] ) ? array_map('sanitize_text_field', $_GET['ex_cat'] ) : [];
 			$tag_search     = isset( $_GET['tag'] ) ? array_map('sanitize_text_field', $_GET['tag'] ) : [];
@@ -207,6 +208,7 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 				'post_status'    => 'publish',
 				'post_type'      => 'product',
 				'posts_per_page' => 10,
+				'no_found_rows'  => true,
 				's'              => $keyword
 			);
 			$tax_arr = [];
@@ -828,19 +830,19 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 			if ( ! current_user_can( "edit_post", $post_id ) ) {
 				return $post_id;
 			}
-			if ( ! wp_verify_nonce( wc_clean( wp_unslash( $_REQUEST['bopobb_product_nonce'] ) ), 'bopobb_product_nonce' ) ) {
+			if ( ! isset( $_REQUEST['bopobb_product_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['bopobb_product_nonce'] ) ), 'bopobb_product_nonce' ) ) {
 				return $post_id;
 			}
 			if ( isset( $_POST['product-type'] ) && ( $_POST['product-type'] == 'bopobb' ) ) {
 				if ( isset( $_POST['bopobb_count'] ) && ! empty( $_POST['bopobb_count'] ) ) {
 					update_post_meta( $post_id, 'bopobb_count', ( absint( $_POST['bopobb_count'] ) ) );
 					if ( isset( $_POST['bopobb_title'] ) && ! empty( $_POST['bopobb_title'] ) ) {
-						update_post_meta( $post_id, 'bopobb_title', ( sanitize_text_field( $_POST['bopobb_title'] ) ) );
+						update_post_meta( $post_id, 'bopobb_title', ( sanitize_text_field( wp_unslash( $_POST['bopobb_title'] ) ) ) );
 					} else {
 						update_post_meta( $post_id, 'bopobb_title', '' );
 					}
 					if ( isset( $_POST['bopobb_shipping_fee'] ) && ! empty( $_POST['bopobb_shipping_fee'] ) ) {
-						update_post_meta( $post_id, 'bopobb_shipping_fee', ( sanitize_text_field( $_POST['bopobb_shipping_fee'] ) ) );
+						update_post_meta( $post_id, 'bopobb_shipping_fee', ( sanitize_text_field( wp_unslash( $_POST['bopobb_shipping_fee'] ) ) ) );
 					}
 					for ( $i = 0; $i < absint( $_POST['bopobb_count'] ); $i ++ ) {
 						$item_bundle = [];
@@ -848,28 +850,28 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 							$item_bundle['bopobb_index'] = absint( $_POST[ 'bopobb_index_' . $i ] );
 						}
 						if ( isset( $_POST[ 'bopobb_pbi_category_' . $i ] ) && ! empty( $_POST[ 'bopobb_pbi_category_' . $i ] ) ) {
-							$item_bundle['bopobb_pbi_category'] = array_map( 'esc_attr', $_POST[ 'bopobb_pbi_category_' . $i ] );
+							$item_bundle['bopobb_pbi_category'] = array_map( 'esc_attr', wc_clean( wp_unslash( $_POST[ 'bopobb_pbi_category_' . $i ] ) ) );
 						}
 						if ( isset( $_POST[ 'bopobb_pbi_category_exclude_' . $i ] ) && ! empty( $_POST[ 'bopobb_pbi_category_exclude_' . $i ] ) ) {
-							$item_bundle['bopobb_pbi_category_exclude'] = array_map( 'esc_attr', $_POST[ 'bopobb_pbi_category_exclude_' . $i ] );
+							$item_bundle['bopobb_pbi_category_exclude'] = array_map( 'esc_attr', wc_clean( wp_unslash( $_POST[ 'bopobb_pbi_category_exclude_' . $i ] ) ) );
 						}
 						if ( isset( $_POST[ 'bopobb_pbi_tag_' . $i ] ) && ! empty( $_POST[ 'bopobb_pbi_tag_' . $i ] ) ) {
-							$item_bundle['bopobb_pbi_tag'] = array_map( 'esc_attr', $_POST[ 'bopobb_pbi_tag_' . $i ] );
+							$item_bundle['bopobb_pbi_tag'] = array_map( 'esc_attr', wc_clean( wp_unslash( $_POST[ 'bopobb_pbi_tag_' . $i ] ) ) );
 						}
 						if ( isset( $_POST[ 'bopobb_pbi_tag_exclude_' . $i ] ) && ! empty( $_POST[ 'bopobb_pbi_tag_exclude_' . $i ] ) ) {
-							$item_bundle['bopobb_pbi_tag_exclude'] = array_map( 'esc_attr', $_POST[ 'bopobb_pbi_tag_exclude_' . $i ] );
+							$item_bundle['bopobb_pbi_tag_exclude'] = array_map( 'esc_attr', wc_clean( wp_unslash( $_POST[ 'bopobb_pbi_tag_exclude_' . $i ] ) ) );
 						}
 						if ( isset( $_POST[ 'bopobb_pbi_title_' . $i ] ) && ! empty( $_POST[ 'bopobb_pbi_title_' . $i ] ) ) {
-							$item_bundle['bopobb_pbi_title'] = array_map( 'esc_attr', $_POST[ 'bopobb_pbi_title_' . $i ] );
+							$item_bundle['bopobb_pbi_title'] = array_map( 'esc_attr', wc_clean( wp_unslash( $_POST[ 'bopobb_pbi_title_' . $i ] ) ) );
 						}
 						if ( isset( $_POST[ 'bopobb_pbi_title_exclude_' . $i ] ) && ! empty( $_POST[ 'bopobb_pbi_title_exclude_' . $i ] ) ) {
-							$item_bundle['bopobb_pbi_title_exclude'] = array_map( 'esc_attr', $_POST[ 'bopobb_pbi_title_exclude_' . $i ] );
+							$item_bundle['bopobb_pbi_title_exclude'] = array_map( 'esc_attr', wc_clean( wp_unslash( $_POST[ 'bopobb_pbi_title_exclude_' . $i ] ) ) );
 						}
 						if ( isset( $_POST[ 'bopobb_bpi_sort_' . $i ] ) && ! empty( $_POST[ 'bopobb_bpi_sort_' . $i ] ) ) {
-							$item_bundle['bopobb_bpi_sort'] = sanitize_text_field( $_POST[ 'bopobb_bpi_sort_' . $i ] );
+							$item_bundle['bopobb_bpi_sort'] = sanitize_text_field( wp_unslash( $_POST[ 'bopobb_bpi_sort_' . $i ] ) );
 						}
 						if ( isset( $_POST[ 'bopobb_bpi_order_' . $i ] ) && ! empty( $_POST[ 'bopobb_bpi_order_' . $i ] ) ) {
-							$item_bundle['bopobb_bpi_order'] = sanitize_text_field( $_POST[ 'bopobb_bpi_order_' . $i ] );
+							$item_bundle['bopobb_bpi_order'] = sanitize_text_field( wp_unslash( $_POST[ 'bopobb_bpi_order_' . $i ] ) );
 						}
 						if ( isset( $_POST[ 'bopobb_bpi_set_default_' . $i ] ) ) {
 							$item_bundle['bopobb_bpi_set_default'] = 1;
@@ -877,7 +879,7 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 							$item_bundle['bopobb_bpi_set_default'] = 0;
 						}
 						if ( isset( $_POST[ 'bopobb_bpi_default_product_' . $i ] ) && ! empty( $_POST[ 'bopobb_bpi_default_product_' . $i ] ) ) {
-							$item_bundle['bopobb_bpi_default_product'] = sanitize_text_field( $_POST[ 'bopobb_bpi_default_product_' . $i ] );
+							$item_bundle['bopobb_bpi_default_product'] = sanitize_text_field( wp_unslash( $_POST[ 'bopobb_bpi_default_product_' . $i ] ) );
 						}
 						if ( isset( $_POST[ 'bopobb_bpi_quantity_' . $i ] ) && ! empty( $_POST[ 'bopobb_bpi_quantity_' . $i ] ) ) {
 							$item_bundle['bopobb_bpi_quantity'] = absint( $_POST[ 'bopobb_bpi_quantity_' . $i ] );
@@ -901,7 +903,7 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 		}
 
 		function bopobb_delete_option_fields( $post_id ) {
-			if ( ! wp_verify_nonce( wc_clean( wp_unslash( $_REQUEST['bopobb_product_nonce'] ) ), 'bopobb_product_nonce' ) ) {
+			if ( ! isset( $_REQUEST['bopobb_product_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['bopobb_product_nonce'] ) ), 'bopobb_product_nonce' ) ) {
 				return;
 			}
 			if ( isset( $_POST['product-type'] ) && ( $_POST['product-type'] !== 'bopobb' ) ) {
@@ -988,8 +990,8 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 		}
 
 		public function bopobb_create_product_tutorial() {
-			if ( isset( $_GET['product_type'] ) || ! current_user_can( 'manage_options' ) ) {// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$script = 'var bopobb_get_type = "' . sanitize_text_field( $_GET['product_type'] ) . '"';// phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+			if ( isset( $_GET['product_type'] ) && current_user_can( 'manage_options' ) ) {// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$script = 'var bopobb_get_type = "' . sanitize_text_field( wp_unslash( $_GET['product_type'] ) ) . '"';// phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
                 <script type="text/javascript" data-cfasync="false">
 					<?php echo $script;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 </script>
