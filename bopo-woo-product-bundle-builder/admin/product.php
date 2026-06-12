@@ -991,9 +991,11 @@ if ( ! class_exists( 'VI_WOO_BOPO_BUNDLE_Product' ) ) {
 
 		public function bopobb_create_product_tutorial() {
 			if ( isset( $_GET['product_type'] ) && current_user_can( 'manage_options' ) ) {// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$script = 'var bopobb_get_type = "' . sanitize_text_field( wp_unslash( $_GET['product_type'] ) ) . '"';// phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+				$get_p_type = sanitize_text_field( wp_unslash( $_GET['product_type'] ) );
+				$get_p_type = $get_p_type != 'bopobb' ? 'other' : $get_p_type;
+			    $script = 'var bopobb_get_type = "' . $get_p_type . '"';// phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
                 <script type="text/javascript" data-cfasync="false">
-					<?php echo $script;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo esc_js( $script );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 </script>
 				<?php
 			}

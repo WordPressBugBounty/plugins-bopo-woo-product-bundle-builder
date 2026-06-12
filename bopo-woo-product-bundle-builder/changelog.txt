@@ -1,3 +1,6 @@
+/**1.2.1 - 2026.06.12 **/
+– Updated: Compatible with WP 7.0 and WC 10.8
+
 /**1.2.0 - 2026.04.03 **/
 - Updated: Optimize code
 

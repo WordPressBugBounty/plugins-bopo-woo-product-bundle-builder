@@ -27,7 +27,7 @@ jQuery(document).ready(function ($) {
     });
 
     function bopobb_init_new_bopo(type = 'bopobb') {
-        if (type == 'bopobb') {
+        if (type === 'bopobb') {
             $('#product-type').val('bopobb');
 
             $('li.general_tab').addClass('show_if_bopobb');
